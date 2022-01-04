@@ -9,12 +9,6 @@ PCLIBDIR ?= $(LIBDIR)/pkgconfig
 # collect C++ sources, and link if necessary
 CPPSRC := $(wildcard src/*.cc)
 
-ifeq (, $(CPPSRC))
-	ADDITIONALLIBS := 
-else
-	ADDITIONALLIBS := -lc++
-endif
-
 # collect sources
 SRC := $(wildcard src/*.c)
 SRC += $(CPPSRC)
@@ -34,12 +28,12 @@ ifeq ($(shell uname),Darwin)
 	SOEXT = dylib
 	SOEXTVER_MAJOR = $(SONAME_MAJOR).dylib
 	SOEXTVER = $(SONAME_MAJOR).$(SONAME_MINOR).dylib
-	LINKSHARED += -dynamiclib -Wl,$(ADDITIONALLIBS),-install_name,$(LIBDIR)/libtree-sitter-go.$(SONAME_MAJOR).dylib
+	LINKSHARED += -dynamiclib -Wl,-install_name,$(LIBDIR)/libtree-sitter-go.$(SONAME_MAJOR).dylib
 else
 	SOEXT = so
 	SOEXTVER_MAJOR = so.$(SONAME_MAJOR)
 	SOEXTVER = so.$(SONAME_MAJOR).$(SONAME_MINOR)
-	LINKSHARED += -shared -Wl,$(ADDITIONALLIBS),-soname,libtree-sitter-go.so.$(SONAME_MAJOR)
+	LINKSHARED += -shared -Wl,-soname,libtree-sitter-go.so.$(SONAME_MAJOR)
 endif
 ifneq (,$(filter $(shell uname),FreeBSD NetBSD DragonFly))
 	PCLIBDIR := $(PREFIX)/libdata/pkgconfig
